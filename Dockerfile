@@ -13,4 +13,4 @@ ADD tx_out.json /data/
 ADD token.json /data/
 ADD wallets.json /data/
 
-CMD locust -f locustfile.py --host=${HOST} -t 45 -r 150 -c 10000 --no-web
+CMD locust -f locustfile.py --host=${HOST} -t 60 -r 65 -c 3000 --no-web
