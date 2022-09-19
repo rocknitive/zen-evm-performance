@@ -1,3 +1,4 @@
+from tracemalloc import start
 from locust import HttpLocust, TaskSet, task
 from random import randrange
 
@@ -70,43 +71,39 @@ class UserBehaviour(TaskSet):
                 "params": [block_nr, True], "id": 1}
         self.client.post("/", name="eth_getBlockByNumber", json=body)
 
-    # @task(1)
-    # def get_all_eos_logs(self):
-    #     startblock = "0x494681"  # 4802177
-    #     endblock = "0x4D90D1"  # 5083345
-    #     eosaddr = "0xd0a6E6C54DbC68Db5db3A091B171A77407Ff7ccf"  # eos crowfunding contract
-    #     body = {"jsonrpc": "2.0",
-    #             "method": "eth_getLogs",
-    #             "id": 1,
-    #             "params": [{"fromBlock": startblock,
-    #                         "toBlock": endblock,
-    #                         "address": eosaddr}]}
-    #     self.client.post(
-    #         "/", name="eth_getLogs (EOS Crowdfunding all 280k blocks", json=body)
+    @task(1)
+    def get_all_eos_logs(self):
+        startblock  = str(hex(randrange(1, self.locust.max_block)))
+        endblock = str(hex(randrange(1, self.locust.max_block)))
+        if (startblock > endblock):
+            tmp = endblock
+            endblock = startblock
+            startblock = tmp
 
-    # @task(1)
-    # def get_some_eos_logs(self):
-    #     startblock = "0x4D230D"  # 5055245
-    #     endblock = "0x4D90D1"  # 5083345
-    #     eosaddr = "0xd0a6E6C54DbC68Db5db3A091B171A77407Ff7ccf"
-    #     body = {"jsonrpc": "2.0",
-    #             "method": "eth_getLogs",
-    #             "id": 1,
-    #             "params": [{"fromBlock": startblock,
-    #                         "toBlock": endblock,
-    #                         "address": eosaddr}]}
-    #     self.client.post(
-    #         "/", name="eth_getLogs (EOS Crowdfunding 28k blocks", json=body)
+        body = {"jsonrpc": "2.0",
+                "method": "eth_getLogs",
+                "id": 1,
+                "params": [{"fromBlock": startblock,
+                            "toBlock": endblock,
+                            "address": self.locust.token['address']}]}
+        self.client.post(
+            "/", name="eth_getLogs", json=body)
 
-    # @task(1)
-    # def get_last_eos_logs(self):
-    #     eosaddr = "0xd0a6E6C54DbC68Db5db3A091B171A77407Ff7ccf"
-    #     body = {"jsonrpc": "2.0",
-    #             "method": "eth_getLogs",
-    #             "id": 1,
-    #             "params": [{"address": eosaddr}]}
-    #     self.client.post(
-    #         "/", name="eth_getLogs (EOS Crowdfunding last block", json=body)
+    @task(1)
+    def get_all_eos_logs(self):
+        startblock  = str(hex(randrange(1, self.locust.max_block)))
+        endblock = str(hex(randrange(1, self.locust.max_block)))
+        if (startblock > endblock):
+            tmp = endblock
+            endblock = startblock
+            startblock = tmp
+
+        body = {"jsonrpc": "2.0",
+                 "method": "eth_getLogs",
+                 "id": 1,
+                 "params": self.locust.token['address']}
+        self.client.post(
+            "/", name="eth_getLogs (last block)", json=body)
 
     @task()
     def get_random_tx_by_hash(self):
@@ -116,6 +113,7 @@ class UserBehaviour(TaskSet):
                 "params": [tx]}
         self.client.post("/", name="eth_getTransactionByHash", json=body)
 
+    # TODO when containerization works
     # @task()
     # def random_eth_call(self):
     #     block_nr = str(hex(randrange(1, 5083345)))
@@ -125,9 +123,6 @@ class UserBehaviour(TaskSet):
     #             "id": 1}
     #     self.client.post(
     #         "/", name="eth_call (balanceOf for token on an address for random block)", json=body)
-
-    # eth_sendRawTransaction
-    # skipping this for now
     
 
 class APIUser(HttpLocust):
