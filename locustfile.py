@@ -8,25 +8,25 @@ import json
 
 class UserBehaviour(TaskSet):
 
-    @task()
+    @task(1)
     def random_estimategas(self):
         body = {"jsonrpc": "2.0", "method": "eth_estimateGas",
                 "id": 1, "params": [{}]}
         self.client.post("/", name="eth_estimateGas", json=body)
 
-    @task()
+    @task(1)
     def gasprice(self):
         body = {"jsonrpc": "2.0", "method": "eth_gasPrice", "params": [], "id": 1}
         self.client.post("/", name="eth_gasPrice", json=body)
 
-    @task()
+    @task(1)
     def random_unclecount(self):
         block_nr = str(hex(randrange(1, self.locust.max_block)))
         body = {"jsonrpc": "2.0", "method": "eth_getUncleCountByBlockNumber",
                 "params": [block_nr], "id": 1}
         self.client.post("/", name="eth_getUncleCountByBlockNumber", json=body)
 
-    @task()
+    @task(1)
     def random_txsum(self):
         block_nr = str(hex(randrange(1, self.locust.max_block)))
         body = {"jsonrpc": "2.0", "method": "eth_getBlockTransactionCountByNumber",
@@ -34,28 +34,28 @@ class UserBehaviour(TaskSet):
         self.client.post(
             "/", name="eth_getBlcokTransactionCountByNumber", json=body)
 
-    @task()
+    @task(1)
     def random_txcount(self):
         block_nr = str(hex(randrange(1, self.locust.max_block)))
         body = {"jsonrpc": "2.0", "method": "eth_getTransactionCount",
                 "params": [self.locust.token['address'], block_nr], "id": 1}
         self.client.post("/", name="eth_getTransactionCount", json=body)
 
-    @task()
+    @task(1)
     def random_code(self):
         block_nr = str(hex(randrange(1, self.locust.max_block)))
         body = {"jsonrpc": "2.0", "method": "eth_getCode",
                 "params": [self.locust.token['address'], block_nr], "id": 1}
         self.client.post("/", name="eth_getCode", json=body)
 
-    @task()
+    @task(1)
     def random_storage(self):
         block_nr = str(hex(randrange(1, self.locust.max_block)))
         body = {"jsonrpc": "2.0", "method": "eth_getStorageAt",
                 "params": [self.locust.token['address'], "0x0", block_nr], "id": 1}
         self.client.post("/", name="eth_getStorageAt", json=body)
 
-    @task()
+    @task(1)
     def random_balance(self):
         block_nr = str(hex(randrange(1, self.locust.max_block)))
         rndnum = randrange(0, len(self.locust.wallets))
@@ -63,7 +63,7 @@ class UserBehaviour(TaskSet):
         body = {"jsonrpc": "2.0", "method": "eth_getBalance", "params": [address, block_nr], "id": 1}
         self.client.post("/", name="eth_getBalance", json=body)
 
-    @task()
+    @task(1)
     def random_blockbynumber(self):
         block_nr = str(hex(randrange(1, self.locust.max_block)))
 
@@ -105,24 +105,24 @@ class UserBehaviour(TaskSet):
         self.client.post(
             "/", name="eth_getLogs (last block)", json=body)
 
-    @task()
+    @task(1)
     def get_random_tx_by_hash(self):
         rndnum = randrange(0, len(self.locust.txs))
-        tx = str(self.locust.txs[rndnum]["tx"])
+        tx = str(self.locust.txs[rndnum]["hash"])
         body = {"jsonrpc": "2.0", "method": "eth_getTransactionByHash", "id": 1,
                 "params": [tx]}
         self.client.post("/", name="eth_getTransactionByHash", json=body)
 
-    # TODO when containerization works
-    # @task()
-    # def random_eth_call(self):
-    #     block_nr = str(hex(randrange(1, 5083345)))
-
-    #     body = {"jsonrpc": "2.0", "method": "eth_call",
-    #             "params": [{"to": self.locust.token['address'], "data": "0x18160ddd"}, block_nr],
-    #             "id": 1}
-    #     self.client.post(
-    #         "/", name="eth_call (balanceOf for token on an address for random block)", json=body)
+    @task(1)
+    def random_eth_call(self):
+        block_nr = str(hex(randrange(1, self.locust.max_block)))
+        rndnum = randrange(0, len(self.locust.wallets))
+        addr = str(self.locust.wallets[rndnum]["address"][2:])
+        body = {"jsonrpc": "2.0", "method": "eth_call",
+                "params": [{"to": self.locust.token['address'], "data": "0x70a08231" + '000000000000000000000000' + addr}, block_nr],
+                "id": 1}
+        self.client.post(
+            "/", name="eth_call (balanceOf for token on an address for random block)", json=body)
     
 
 class APIUser(HttpLocust):
@@ -137,4 +137,5 @@ class APIUser(HttpLocust):
         token = json.load(jsonfile)
     with open("wallets.json", "r") as jsonfile:
         wallets = json.load(jsonfile)
+
     max_block = 1000
