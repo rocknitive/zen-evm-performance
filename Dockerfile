@@ -1,20 +1,36 @@
-FROM python:3.6
+FROM python:3.7
 
-RUN pip install locustio==0.14.6 ujson web3
+RUN pip install locust==2.12.1 ujson
 
 EXPOSE 8089
 
-ARG FILE_POSTFIX
 
 ENV HOST http://localhost:8282
-ENV LOCSUTFILE locustfile-${FILE_POSTFIX}.py
+ENV LOGFILE /output/locust-log.out
+
+ENV LOCUST_TAG all
+ENV CSV_PREFIX csv
+
+ENV BENCHMARK_TIME 15
+ENV SPAWN_RATE 10
+ENV USER_COUNT 1200
+
 
 RUN mkdir -p /data/
 WORKDIR /data/
-ADD locustfile-${FILE_POSTFIX}.py /data/
+ADD locustfile.py /data/
 ADD tx_out.json /data/
 ADD token.json /data/
 ADD wallets.json /data/
-ADD env.json /data/
 
-CMD locust -f ${LOCSUTFILE} --host=${HOST} -t 60 -r 300 -c 12000 --no-web
+
+CMD locust -f locustfile.py \
+    -H ${HOST} \
+    -t ${BENCHMARK_TIME} \
+    -r ${SPAWN_RATE} \
+    -u ${USER_COUNT} \
+    --headless \
+    --tags ${LOCUST_TAG} \
+    --autoquit 0 --autostart \
+    --logfile ${LOGFILE}\
+    --csv ${CSV_PREFIX}

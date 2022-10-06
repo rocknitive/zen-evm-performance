@@ -1,0 +1,27 @@
+#! /bin/bash
+while IFS="," read -r rec_column1 rec_column2 rec_column3 rec_column4 rec_column5 rec_column6 rec_column7 rec_column8 rec_column9 rec_column10 rec_column11 rec_column12 rec_column13 rec_column14 rec_column15 rec_column16 rec_column17 rec_column18 rec_column19 rec_column20 rec_column21 rec_column22
+do
+  echo "Type: $rec_column1"
+  echo "Name: $rec_column2"
+  echo "Request Count: $rec_column3"
+  echo "Faliure Count: $rec_column4"
+  echo "Median Response Time: $rec_column5"
+  echo "Average Response Time: $rec_column6"
+  echo "Min Response Time: $rec_column7"
+  echo "Max Response Time: $rec_column8"
+  echo "Average Content Size: $rec_column9"
+  echo "Requests/s: $rec_column10"
+  echo "Failures/s: $rec_column11"
+  echo "50%: $rec_column12"
+  echo "66%: $rec_column13"
+  echo "75%: $rec_column14"
+  echo "80%: $rec_column15"
+  echo "90%: $rec_column16"
+  echo "95%: $rec_column17"
+  echo "98%: $rec_column18"
+  echo "99%: $rec_column19"
+  echo "99.9%: $rec_column20"
+  echo "99.99%: $rec_column21"
+  echo "100%: $rec_column22"
+  echo ""
+done < <(tail -n +2 ${1})

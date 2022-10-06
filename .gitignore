@@ -2,3 +2,5 @@ token.json
 wallets.json
 tx_out.json
 env.json
+logs/*.out
+output/*.csv
