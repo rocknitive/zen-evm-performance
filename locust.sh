@@ -31,19 +31,19 @@ docker run \
 
 echo "Running low load benchmark..."
 
-# docker run \
-#     --network=host \
-#     -t --init --rm \
-#     -e HOST=http://${1}:8545 \
-#     -e LOGFILE="/${LOGFILE_LO}" \
-#     -e LOCUST_TAG=${2} \
-#     -e CSV_PREFIX="/${CSV_PREFIX_LO}" \
-#     -e BENCHMARK_TIME=${BENCHMARK_TIME} \
-#     -e SPAWN_RATE=${SPAWN_RATE_LO} \
-#     -e USER_COUNT=${USER_COUNT_LO} \
-#     -v $(pwd)/logs:/logs \
-#     -v $(pwd)/output:/output \
-#     bleth 
+docker run \
+    --network=host \
+    -t --init --rm \
+    -e HOST=http://${1}:8545 \
+    -e LOGFILE="/${LOGFILE_LO}" \
+    -e LOCUST_TAG=${2} \
+    -e CSV_PREFIX="/${CSV_PREFIX_LO}" \
+    -e BENCHMARK_TIME=${BENCHMARK_TIME} \
+    -e SPAWN_RATE=${SPAWN_RATE_LO} \
+    -e USER_COUNT=${USER_COUNT_LO} \
+    -v $(pwd)/logs:/logs \
+    -v $(pwd)/output:/output \
+    bleth 
 
 HI_STATS_FILE=$(find $(pwd)/output -name "*hi-${2}_stats.csv" -print0 |
     xargs -r -0 ls -1 -t |
