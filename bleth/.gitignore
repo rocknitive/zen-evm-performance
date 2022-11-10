@@ -1,0 +1,5 @@
+token.json
+wallets.json
+tx_out.json
+logs/*.out
+output/*.csv
