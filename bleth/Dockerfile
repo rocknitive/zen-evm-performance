@@ -1,9 +1,6 @@
 FROM python:3.7
 
-RUN pip install locust==2.12.1 ujson
-
 EXPOSE 8089
-
 
 ENV HOST http://localhost:8282
 ENV LOGFILE /output/locust-log.out
@@ -15,14 +12,16 @@ ENV BENCHMARK_TIME 15
 ENV SPAWN_RATE 10
 ENV USER_COUNT 1200
 
-
 RUN mkdir -p /data/
 WORKDIR /data/
+
+ADD requirements.txt /data/
+RUN pip install -r requirements.txt
+
 ADD locustfile.py /data/
 ADD tx_out.json /data/
 ADD token.json /data/
 ADD wallets.json /data/
-
 
 CMD locust -f locustfile.py \
     -H ${HOST} \

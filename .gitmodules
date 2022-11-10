@@ -1,0 +1,3 @@
+[submodule "compose-evm-regtest-v2"]
+	path = compose-evm-regtest-v2
+	url = git@github.com:HorizenOfficial/compose-evm-regtest-v2.git
