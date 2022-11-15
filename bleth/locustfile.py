@@ -112,7 +112,7 @@ class APIUser(HttpUser):
                 "params": [tx]}
         self.client.post("/", name="eth_getTransactionByHash", json=body)
 
-    @tag('call')
+    @tag('call', 'all')
     @task(1)
     def random_eth_call(self):
         block_nr = str(hex(randrange(1, self.max_block)))
