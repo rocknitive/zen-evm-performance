@@ -21,13 +21,14 @@ chown -R tixl:tixl /data
 
 ## Execute benchmarks
 
-- Make sure to check out subdirectories: `git submodule update --init --recursive`
+- Make sure to check out subrepositories: `git submodule update --init --recursive`
 - Initialize benchmarks: `./setup_benchmark.sh`
 - Run all benchmarks: `./run_benchmark.sh`
 - Run individual benchmark: `./start_locust.sh <tag>`
  
 Tag can be one of the following:
 - all
+- call
 - estimategas
 - gasprice
 - unclecount

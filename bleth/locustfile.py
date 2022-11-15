@@ -15,6 +15,8 @@ class APIUser(HttpUser):
     with open("wallets.json", "r") as jsonfile:
         wallets = json.load(jsonfile)
 
+    # this is more than the number of existing blocks, thus some calls will fail with "invalid block tag or number"
+    # this is expected and deliberate
     max_block = 1000
 
     @tag('estimategas', 'all')
@@ -30,6 +32,8 @@ class APIUser(HttpUser):
         body = {"jsonrpc": "2.0", "method": "eth_gasPrice", "params": [], "id": 1}
         self.client.post("/", name="eth_gasPrice", json=body)
 
+    # the ZEN EVM sidechain does not have uncles and all calls will result in "method not found"
+    # this is only here to make results more comparable to the Infura benchmark
     @tag('unclecount', 'all')
     @task
     def unclecount(self):

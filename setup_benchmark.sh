@@ -15,8 +15,8 @@ TRANSACTIONS_FILE="${LOCUST_DIR}/tx_out.json"
 
 WALLET_AMOUNT="1000"
 
-echo "make sure subrepositories are updated..."
-git submodule update --init --recursive
+#echo "make sure subrepositories are updated..."
+#git submodule update --init --recursive
 
 echo "launching the nodes..."
 cd "${NODE_ENV_DIR}/scripts" && printf '%s\n' y | ./init.sh

@@ -13,7 +13,7 @@ CONTRACT_FILE="${LOCUST_DIR}/token.json"
 TRANSACTIONS_FILE="${LOCUST_DIR}/tx_out.json"
 
 if [ -z "$1" ]; then
-  echo "No argument supplied, please supply a tag to execute from the list [ estimategas, gasprice, unclecount, txcountbynumber, txcount, getcode, getstorageat, getbalance, getblockbynumber, getlogs, gasprice, txbyhash ]"
+  echo "No argument supplied, please supply a tag to execute from the list [ call, estimategas, gasprice, unclecount, txcountbynumber, txcount, getcode, getstorageat, getbalance, getblockbynumber, getlogs, gasprice, txbyhash ]"
   exit 1
 fi
 
