@@ -1,6 +1,7 @@
-from locust import HttpUser, tag, task, constant
-from random import randrange
 import json
+from random import randrange
+
+from locust import HttpUser, tag, task, constant
 
 
 class APIUser(HttpUser):
@@ -106,3 +107,15 @@ class APIUser(HttpUser):
         body = {"jsonrpc": "2.0", "method": "eth_getTransactionByHash", "id": 1,
                 "params": [tx]}
         self.client.post("/", name="eth_getTransactionByHash", json=body)
+
+    @tag('call')
+    @task(1)
+    def random_eth_call(self):
+        block_nr = str(hex(randrange(1, self.max_block)))
+        rndnum = randrange(0, len(self.wallets))
+        addr = str(self.wallets[rndnum]["address"][2:])
+        body = {"jsonrpc": "2.0", "method": "eth_call",
+                "params": [{"to": self.token['address'], "data": "0x70a08231" + '000000000000000000000000' + addr},
+                           block_nr],
+                "id": 1}
+        self.client.post("/", name="eth_call (balanceOf for token on an address for random block)", json=body)
